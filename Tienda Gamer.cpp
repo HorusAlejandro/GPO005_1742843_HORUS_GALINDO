@@ -1,86 +1,107 @@
 //Programa Hecho en Code Blocks con el Compilador GNU GCC Compiler
 //Por Horus Alejandro https://github.com/HorusAlejandro
 
-#include <iostream>     //LibrerÌa principal para entrada/salida de datos
+#include <iostream>     //Librer√≠a principal para entrada/salida de datos
+#include <stdio.h>      //Entre el uso del printf, scanf
 #include <string.h>     //Es necesario para ingreso de respuestas largas
 #include <string>
-#include <wchar.h>      //Para aÒadir Caracteres especiales como acentos, cosa que CodeBlocks No permitÌa
-#include <locale.h>     //Otra librerÌa con soporte de caracteres para fecha, moneda, dinero
+#include <wchar.h>      //Para a√±adir Caracteres especiales como acentos, cosa que CodeBlocks No permit√≠a
+#include <locale.h>     //Otra librer√≠a con soporte de caracteres para fecha, moneda, dinero
+#include <fstream>      //Para la creaci√≥n de archivos
 
 using namespace std;
 
+float IVA = 0.16; //Porcentaje de impuestos en M√©xico
+int x;           //Opciones
+int L=0;          //Control en la creaci√≥n de elementos
+
+struct Datos    //Declarando los datos que se recibir√°n
+{
+    string Nombre,Descripcion,Caracteristicas,Genero,Version;
+    int Ano;
+    float Precio,Impuesto,Total;
+}Lista[100];
+
+void Ingreso(int Opcion);
+void Modificacion();
+void GenerarLista();
+void Eliminar();
+void Archivo();
+
 int main()
 {
-    //Õndice de variables:
-    //N (Nombre de ArtÌculo)
-    //D (DescripciÛn de ArtÌculo)
-    //C (CaracterÌsticas de ArtÌculo)
-    //G (GÈnero de ArtÌculo)
-    //ID (N˙mero de ArtÌculo)
-    //O (SelecciÛn del men˙)
-    //A (AÒo)
-    //P (Precio Unitario)
-    //IVA (MÈxico, 16%)
-    //T (Total)
+    /*√çndice de variables:
+    Nombre (Nombre de Art√≠culo)
+    Descripcion (Descripci√≥n de Art√≠culo)
+    Caracteristicas (Caracter√≠sticas de Art√≠culo)
+    Genero (G√©nero de Art√≠culo)
+    Version (Versi√≥n del Art√≠culo)
+    Opcion (Selecci√≥n del men√∫)
+    Ano (de lanzamiento)
+    Precio (Precio Unitario)
+    IVA (M√©xico, 16%)
+    Total (Total)
+    */
 
-    string N,D,C,G;
-    int ID,O,A;
-    float P,IVA,T;
+    setlocale(LC_ALL, ""); //Establece el uso de caracteres de la propia m√°quina
 
-    setlocale(LC_ALL, ""); //Establece el uso de caracteres de la propia m·quina
+    //Men√∫
+    printf("\t ***TIENDA GAMERS*** \n \n");
+    printf("Bienvenido, seleccione una opci√≥n \n \n");
+    printf("1. Agregar Art√≠culo \n");
+    printf("2. Modificar Art√≠culo \n");
+    printf("3. Eliminar Art√≠culo \n");
+    printf("4. Lista de Art√≠culos Vigentes \n");
+    printf("5. Limpiar pantalla \n");
+    printf("6. Salir \n \n");
 
-    //Men˙
-    cout << "\t ***TIENDA GAMERS*** \n \n";
-    cout << "Bienvenido, seleccione una opciÛn \n \n";
-    cout << "1. Agregar ArtÌculo \n";
-    cout << "2. Modificar ArtÌculo \n";
-    cout << "3. Eliminar ArtÌculo \n";
-    cout << "4. Lista de ArtÌculos Vigentes \n";
-    cout << "5. Limpiar pantalla \n";
-    cout << "6. Salir \n \n";
-    //ElecciÛn
-    cin >> O;
+    //Elecci√≥n
+    scanf("%d",&x);
+    while (x < 1 || x > 6)
+    {
+        printf("La opci√≥n est√° fuera de rango\n");
+        scanf("%d",&x);
+    }
+    /*
+    scanf("%c",&O);
+    while (O < 49 || O > 54) //Opciones incorrects
+    {
+        printf("La opci√≥n no es v√°lida\n");
+        if(O < 48 || O > 57)  //De pasarse de listo
+        {
+         printf("Aparte, deben ser valores num√©ricos \n");
+        }
+        cin.ignore();
+        scanf("%c",&O);
+    }
+    int x = O - 48; //El valor de 0 es 48
+    */
 
-    //En base a la decisiÛn, hacer acciones
-    switch (O){
+    //En base a la decisi√≥n, hacer acciones
+    switch (x){
 
-    //AÒadido de artÌculos
+    //A√±adido de art√≠culos
     case 1:
-        cout << "Agregue el n˙mero de artÌculo \n";
-        cin >> ID;
-        cout << "\nEscriba el nombre del videojuego \n";
-        cin.ignore(); //Ignora espacios vacios al teclear Enter
-        getline(cin, N); //Recibe la entrada con espacios incluidos
-        cout << "\nIngrese la descripciÛn del artÌculo \n";
-        cin.ignore();
-        getline(cin, D);
-        cout << "\nIngrese las caracterÌsticas del artÌculo \n";
-        cin.ignore();
-        getline(cin, C);
-        cout << "\nIngrese el gÈnero \n";
-        cin.ignore();
-        getline(cin, G);
-        cout << "\nøCu·l es el aÒo de lanzamiento? \n";
-        cin >> A;
-        cout << "\nTeclee el precio unitario \n";
-        cin >> P;
-        IVA = P * 0.16;
-        T = P*1.16;
+        Ingreso(L);
+        L = L+1;
         return main();
         break;
 
-    //A˙n sin implementar, ModificaciÛn de artÌculos
+    //Modificaci√≥n de art√≠culos
     case 2:
+        Modificacion();
         return main();
         break;
 
-    //A˙n sin implementar, EliminaciÛn de artÌculos
+    //Eliminaci√≥n de art√≠culos
     case 3:
+        Eliminar();
         return main();
         break;
 
-    //A˙n sin implementar, Lista de ArtÌculos Vigentes
+    //Lista de Art√≠culos Vigentes
     case 4:
+        GenerarLista();
         return main();
         break;
 
@@ -90,15 +111,233 @@ int main()
         return main();
         break;
 
-    //FinalizaciÛn del programa
+    //Finalizaci√≥n del programa
     case 6:
-        cout << "Gracias por utilizar el programa \n";
+        Archivo();
+        printf("Gracias por utilizar el programa \n");
         break;
-
-    //Opciones Inv·lidas
-    default:
-        cout << "Ingrese una opcion correcta \n";
-        return main();
     }
     return 0;
+}
+
+void Ingreso(int Opcion)
+{
+    printf("\nEscriba el nombre del videojuego \n");
+    cin.ignore();                                            //Ignora espacios vacios al teclear Enter
+    getline(cin, Lista[Opcion].Nombre);                      //Recibe la entrada con espacios incluidos
+                                                             //Solo se necesita un cin.ignore() de poner m√°s, se come la primera letra en loops
+    printf("\nIngrese la versi√≥n del Juego \n");
+    getline(cin, Lista[Opcion].Version);
+
+    printf("\nIngrese la descripci√≥n del art√≠culo \n");
+    getline(cin, Lista[Opcion].Descripcion);
+
+    printf("\nIngrese las caracter√≠sticas del art√≠culo \n");
+    getline(cin, Lista[Opcion].Caracteristicas);
+
+    printf("\nIngrese el g√©nero \n");
+    getline(cin, Lista[Opcion].Genero);
+
+    printf("\nA√±o de Lanzamiento \n");
+    scanf("%d",&Lista[Opcion].Ano);
+
+    printf("\nTeclee el precio unitario \n");
+    scanf("%f",&Lista[Opcion].Precio);
+    Lista[Opcion].Impuesto = Lista[Opcion].Precio*IVA;
+    Lista[Opcion].Total = Lista[Opcion].Precio + Lista[Opcion].Impuesto;
+}
+
+void Modificacion()
+{
+    int x;
+    if(L==0)
+    {
+        printf("A√∫n no se ingresa ning√∫n art√≠culo en la lista\n\n");    //No puede modificar el art√≠culo sin art√≠culos
+    }
+    else
+    {
+        printf("Seleccione el art√≠culo a modificar\n");
+        scanf("%d",&x);
+        x = x - 1;
+        while (x < 0 || x > L-1)
+        {
+            printf("La opci√≥n se encuentra fuera de rango\nVuelva a ingresar la opcion\n");   //No puede elegir art√≠culo fuera de los vigentes
+            scanf("%d",&x);
+            x = x - 1;
+        }
+        Ingreso(x);    //Procede al proceso de ingreso para modificaci√≥n, pero sin agregar nuevo contenido, sobreescribe el art√≠culo seleccionado
+    }
+}
+
+void GenerarLista()
+{
+    if(L>0)
+    {
+        int X,S,Menor=0,Mayor=0,i=0,j=0,Posicion=0,Orden[L];
+        printf("\nOpciones: \n\n");
+        printf("1. Lista Normal por Art√≠culos \n2. Lista por Nombres\n3. Lista por G√©nero\n\n");
+        scanf("%d",&X);
+        switch(X)
+        {
+        case 1:
+            for (int i=0;i<L;i++)  //Generaci√≥n de lista con formato preliminar en el archivo
+            {
+                printf("\n[Art√≠culo %d]\n",i+1);
+                printf("%s\n",Lista[i].Nombre.c_str());
+                printf("Versi√≥n: \n%s \n",Lista[i].Version.c_str());
+                printf("Fecha de lanzamiento: \n%d \n",Lista[i].Ano);
+                printf("Descripci√≥n:\n%s \n",Lista[i].Descripcion.c_str());
+                printf("Caracter√≠sticas:\n%s \n",Lista[i].Caracteristicas.c_str());
+                printf("G√©nero:\n%s \n",Lista[i].Genero.c_str());
+                printf("Precio Neto: \n%f \n",Lista[i].Precio);
+                printf("Precio Total: \n%f \n",Lista[i].Total);
+            }
+            break;
+
+        case 2:
+            for (i=0;i<L;i++)
+            {
+                for(j=0;j<L;j++)
+                {
+                    S=Lista[j].Nombre[0];
+                    if(S > Menor && S < Mayor)
+                    {
+                        Mayor = S;
+                        Posicion = j;
+                    }
+                }
+                Orden[i]=Posicion;
+                Menor = Mayor;
+                Mayor = 255;
+            }
+            for(i=0;i<L;i++)
+            {
+                printf("\n[Art√≠culo %d]\n",Orden[i]+1);
+                printf("%s\n",Lista[Orden[i]].Nombre.c_str());
+                printf("Versi√≥n: \n%s \n",Lista[Orden[i]].Version.c_str());
+                printf("Fecha de lanzamiento: \n%d \n",Lista[Orden[i]].Ano);
+                printf("Descripci√≥n:\n%s \n",Lista[Orden[i]].Descripcion.c_str());
+                printf("Caracter√≠sticas:\n%s \n",Lista[Orden[i]].Caracteristicas.c_str());
+                printf("G√©nero:\n%s \n",Lista[Orden[i]].Genero.c_str());
+                printf("Precio Neto: \n%f \n",Lista[Orden[i]].Precio);
+                printf("Precio Total: \n%f \n",Lista[Orden[i]].Total);
+            }
+        break;
+
+        case 3:
+            for (i=0;i<L;i++)
+            {
+                for(j=0;j<L;j++)
+                {
+                    S=Lista[j].Genero[0];
+                    if(S > Menor && S < Mayor)
+                    {
+                        Mayor = S;
+                        Posicion = j;
+                    }
+                }
+                Orden[i]=Posicion;
+                Menor = Mayor;
+                Mayor = 255;
+            }
+            for(i=0;i<L;i++)
+            {
+                printf("\n[Art√≠culo %d]\n",Orden[i]+1);
+                printf("%s\n",Lista[Orden[i]].Nombre.c_str());
+                printf("Versi√≥n: \n%s \n",Lista[Orden[i]].Version.c_str());
+                printf("Fecha de lanzamiento: \n%d \n",Lista[Orden[i]].Ano);
+                printf("Descripci√≥n:\n%s \n",Lista[Orden[i]].Descripcion.c_str());
+                printf("Caracter√≠sticas:\n%s \n",Lista[Orden[i]].Caracteristicas.c_str());
+                printf("G√©nero:\n%s \n",Lista[Orden[i]].Genero.c_str());
+                printf("Precio Neto: \n%f \n",Lista[Orden[i]].Precio);
+                printf("Precio Total: \n%f \n",Lista[Orden[i]].Total);
+            }
+        break;
+
+        default:
+            printf("\n\nNo selecciono alguna opci√≥n v√°lida, saliendo al menu principal\n\n");
+        break;
+        }
+
+    }
+    else
+    {
+        printf("\nNecesitas ingresar art√≠culos para mostrar resultados\n");   //No muestra sin art√≠culos
+    }
+}
+
+void Eliminar()
+{
+    if(L==0)
+    {
+        printf("A√∫n no ingresa datos que eliminar");   //No elimina sin art√≠culos
+    }
+    else
+    {
+        int S;
+        printf("Seleccione un dato de la lista a eliminar \n");
+        scanf("%d",&S);
+        S = S-1;
+        while (S < 0 || S > L-1)
+        {
+            printf("Seleccione dentro del rango de la lista\n");   //Tiene que ser de los art√≠culos vigentes
+            scanf("%d",&S);
+            S = S-1;
+        }
+        for(int i=S;i<L;i++)  //Mueve todos los art√≠culos desde la posici√≥n seleccionada una posici√≥n menos
+        {
+            Lista[S].Caracteristicas = Lista[S+1].Caracteristicas;
+            Lista[S].Nombre = Lista[S+1].Nombre;
+            Lista[S].Ano = Lista[S+1].Ano;
+            Lista[S].Genero = Lista[S+1].Genero;
+            Lista[S].Descripcion = Lista[S+1].Descripcion;
+            Lista[S].Precio = Lista[S+1].Precio;
+            Lista[S].Impuesto = Lista[S+1].Impuesto;
+            Lista[S].Total = Lista[S+1].Total;
+            Lista[S].Version = Lista[S+1].Version;
+            S = S+1;
+        }
+        Lista[L].Caracteristicas = "a";         //Al √∫ltimo dato fuera de la lista, se le sobreescribe valores m√≠nimos
+        Lista[L].Nombre = "a";
+        Lista[L].Ano = 0;
+        Lista[L].Genero = "a";
+        Lista[L].Descripcion = "a";
+        Lista[L].Precio = 0;
+        Lista[L].Impuesto = 0;
+        Lista[L].Total = 0;
+        Lista[L].Version = "a";
+        L = L-1;
+    }
+}
+
+void Archivo()
+{
+    ofstream archivos;
+    string nombre;
+
+    nombre = "Lista_de_Juegos.txt";
+    archivos.open(nombre.c_str(), ios::out);
+
+    if(archivos.fail())
+    {
+        printf("ERROR NO SE GENERO EL ARCHIVO \n");
+        system("pause");
+        exit(1);
+    }
+
+    archivos << "\t \t INFORMACION \n";
+    for(int i=0;i<L;i++)
+    {
+        archivos << "|--------------|\n\n";
+        archivos << "[Art√≠culo: " << i+1 << "]";
+        archivos << "\n\n[Nombre:] \n" << Lista[i].Nombre.c_str();
+        archivos << "\n\n[Versi√≥n:] \n" << Lista[i].Version.c_str();
+        archivos << "\n\n[A√±o:]\n" << Lista[i].Ano;
+        archivos << "\n\n[Descripci√≥n:]\n" << Lista[i].Descripcion.c_str();
+        archivos << "\n\n[Caracter√≠sticas:]\n" << Lista[i].Caracteristicas.c_str();
+        archivos << "\n\n[Precio Neto:]\n" << Lista[i].Precio;
+        archivos << "\n\n[Impuesto:]\n" << Lista[i].Impuesto;
+        archivos << "\n\n[Precio Total:]\n" << Lista[i].Total << endl << endl;
+    }
+    archivos.close();
 }
